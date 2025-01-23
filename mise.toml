@@ -1,0 +1,6 @@
+[tools]
+task = 'latest'
+jq = 'latest'
+opentofu = "latest"
+terraform = "latest"
+kind = "latest"
