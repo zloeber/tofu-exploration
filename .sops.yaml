@@ -1,9 +1,0 @@
----
-creation_rules:
-  - age: >-
-      age1vqdzyqewl8pjzr2fmq66xznef6apcdvkm6lk5j0qzllvwul4ryuqnv2rgz
-stores:
-  json:
-    indent: 2
-  json_binary:
-    indent: 2

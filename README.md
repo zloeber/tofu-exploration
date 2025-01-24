@@ -42,16 +42,6 @@ There are two branches so you can better diff the changes between the terraform 
 **main** - terraform based deployment
 **tofu** - tofu based deployment (go to this branch for tofu related notes and tasks)
 
-# Tips
-
-- This builds two kube clusters then drops private keys and kube config locally in ~~a .gitignore defined~~ the `./secrets` path. You can use this to your advantage and target that folder with sops to encrypt things per cluster with just a wee bit more work ;)
-
-- You can use [OpenLens](https://github.com/MuhammedKalkan/OpenLens) to explore your local cluster by pointing it at the kube config file.
-
-- Most everything can be configured in the `Taskfile.yml` file, including if you'd like to use tofu or terraform. Fun for testing some of the new tofu features out as shown here.
-
-- If `task deploy:all` fails try `task deploy`. If that fails try removing the clusters `kind delete cluster -n cluster1; kind delete cluster -n cluster2`
-
 # Terraform
 
 The `main` branch includes terraform manifests for deploying 2 kind clusters side by side. The state is stored for each component as separate terraform state files in the `./secrets` folder. This folder is then targeted with `sops` to encrypt contents within.
@@ -123,3 +113,13 @@ To remove the clusters and clean up your work.
 # Tear them down
 task destroy:all
 ```
+
+# Tips
+
+- This builds two kube clusters then drops private keys and kube config locally in ~~a .gitignore defined~~ the `./secrets` path. You can use this to your advantage and target that folder with sops to encrypt things per cluster with just a wee bit more work ;)
+
+- You can use [OpenLens](https://github.com/MuhammedKalkan/OpenLens) to explore your local cluster by pointing it at the kube config file.
+
+- Most everything can be configured in the `Taskfile.yml` file, including if you'd like to use tofu or terraform. Fun for testing some of the new tofu features out as shown here.
+
+- If `task deploy:all` fails try `task deploy`. If that fails try removing the clusters `kind delete cluster -n cluster1; kind delete cluster -n cluster2`
