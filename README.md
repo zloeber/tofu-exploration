@@ -114,6 +114,49 @@ To remove the clusters and clean up your work.
 task destroy:all
 ```
 
+# Opentofu
+
+This is the same deployment using opentofu's encrypted state and provider iteration. Big update is that we are changing the binary used in our main `Taskfile.yml` definition.
+
+I did try to use the VSCode plugin for OpenTofu but it was not very helpful for the more recent features (like the encryption block).
+
+## State/Plan Encryption
+
+As [per the docs](https://opentofu.org/docs/language/state/encryption/) we can encrypt state and plan data natively with opentofu.
+
+This can be enabled via the `TF_ENCRYPTION` environment variable or in the terraform block. The way this works is that you define a `method` which can optionally contain key providers or other configuration for encryption. The key providers and methods available are not so large currently but it is still enough to get along.
+
+> **Vault Transit Support** is not available if vault is running beyond 1.14 (the license change). It is experimental for openbao otherwise.
+
+Anyway, the methods are assigned to the `state` and/or `plan` terraform definitions as either the primary or backup encryption types.
+
+```mermaid
+flowchart TD
+    State
+    Plan
+    Passphrase -->|for| KeyProvider[Key Provider - pbkdf2]
+    Method1[Method 1 - AES Key]
+    Method2[Method 2 - Unencrypted]
+    State -->|Uses First| Method1
+    Plan -->|Uses First| Method1
+    KeyProvider -->|for|Method1
+    Method1 -.->|Backup|Method2
+```
+
+You can infer that your entry point for secret zero in a local file based state encryption will be that passphrase. We need to use something greater than 16 characters and private. The age private key can be used for this easily enough by setting the `TF_VAR_state_passphrase` variable I setup just for this purpose in the variables for these deployments.
+
+**Important!** Ensure you have your local age key pair created with `task sops:age:keygen` (existing key will always be preserved).
+
+With this in place I updated the local `Taskfile.yml` manifest to automatically source the private key value into that environment variable so it could be in place for encryption and added the relevant terraform.encryption block and variables for each terraform stack we are targeting.
+
+If we run the deployment with no further changes then it automatically encrypts the terraform state files when we deploy via `task deploy:all`.
+
+This does **not** encrypt any of the generated files we dump into that folder!
+
+Specifically the argo git ssh keys and the kubernetes configuration files are not covered in this case. But we have that data from our state so we simply start ignoring them via `.gitignore` knowing we can always recreate them later via the encrypted state and `task deploy:all`.
+
+> **Interesting:** Because the kind provider I used doesn't track the local config file resource when you create the cluster using that attribute I needed to make minor changes to isolate the kubeconfig files to their own generated file resources instead.
+
 # Tips
 
 - This builds two kube clusters then drops private keys and kube config locally in ~~a .gitignore defined~~ the `./secrets` path. You can use this to your advantage and target that folder with sops to encrypt things per cluster with just a wee bit more work ;)

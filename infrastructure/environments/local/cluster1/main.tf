@@ -1,5 +1,31 @@
 terraform {
-  required_version = ">= 1.0.0"
+  required_version = ">= 1.9.0"
+    encryption {
+    ## Step 1: Add the desired key provider:
+    key_provider "pbkdf2" "mykey" {
+      passphrase = var.state_passphrase
+    }
+    ## Step 2: Set up your encryption method:
+    method "aes_gcm" "passphrase" {
+      keys = key_provider.pbkdf2.mykey
+    }
+
+    method "unencrypted" "insecure" {}
+    state {
+      # enforced = true
+      method = method.aes_gcm.passphrase
+      fallback {
+        method = method.unencrypted.insecure
+      }
+    }
+    plan {
+      # enforced = true
+      method = method.aes_gcm.passphrase
+      fallback {
+        method = method.unencrypted.insecure
+      }
+    }
+  }
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -12,6 +38,15 @@ terraform {
   }
   backend "local" {
     path = "../../../../secrets/local/cluster1_tfstate.json"
+  }
+}
+
+variable "state_passphrase" {
+  type = string
+  description = "value of the passphrase used to encrypt the state file"
+  validation {
+    condition     = length(var.state_passphrase) >= 16
+    error_message = "The passphrase must be at least 16 characters long."
   }
 }
 

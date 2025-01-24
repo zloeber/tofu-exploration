@@ -2,7 +2,7 @@
 task = 'latest'
 jq = 'latest'
 opentofu = "latest"
-terraform = "latest"
+#terraform = "latest"
 kind = "latest"
 sops = "latest"
 age = "latest"

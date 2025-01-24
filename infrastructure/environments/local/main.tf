@@ -1,16 +1,31 @@
-locals {
-  ## in the future, we can read the config files and secrets from a central location
-  # global_config         = jsondecode(file("${path.module}/../../../config/global.json"))
-  # env_config            = jsondecode(file("${path.module}/../../../config/env.${var.env}.json"))
-  # secret_config         = jsondecode(file("${path.module}/../../../secrets/${var.env}.json"))
-  # kube_config_base_path = "${path.module}/../../../secrets/${var.env}/kube"
-  # config                = merge(local.global_config, local.env_config)
-  # kube_clusters         = local.config.kube_clusters
-  # kube_map              = { for cluster in local.kube_clusters : cluster.name => cluster }
-}
-
 terraform {
-  required_version = ">= 1.0.0"
+  required_version = ">= 1.9.0"
+  encryption {
+    ## Step 1: Add the desired key provider:
+    key_provider "pbkdf2" "mykey" {
+      passphrase = var.state_passphrase
+    }
+    ## Step 2: Set up your encryption method:
+    method "aes_gcm" "passphrase" {
+      keys = key_provider.pbkdf2.mykey
+    }
+
+    method "unencrypted" "insecure" {}
+    state {
+      # enforced = true
+      method = method.aes_gcm.passphrase
+      fallback {
+        method = method.unencrypted.insecure
+      }
+    }
+    plan {
+      # enforced = true
+      method = method.aes_gcm.passphrase
+      fallback {
+        method = method.unencrypted.insecure
+      }
+    }
+  }
   required_providers {
     kind = {
       source  = "tehcyx/kind"
@@ -22,8 +37,7 @@ terraform {
   }
 }
 
-
-## Kind
+## Kind cluster creation
 module "clusters" {
   for_each = toset(var.clusters)
   source              = "../../modules/k8s-kind-cluster"

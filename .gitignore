@@ -161,3 +161,6 @@ terraform.rc
 *.lock.hcl
 #secrets
 *.backup
+secrets/*/*_config
+secrets/*/*_id_rsa
+secrets/*/*_id_rsa.pub

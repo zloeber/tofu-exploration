@@ -16,6 +16,10 @@ terraform {
 
 resource "kind_cluster" "this" {
   name           = var.cluster_name
-  kubeconfig_path    = pathexpand(var.cluster_config_path)
   wait_for_ready = true
+}
+
+resource "local_file" "kubeconfig" {
+  content  = kind_cluster.this.kubeconfig
+  filename = pathexpand(var.cluster_config_path)
 }
