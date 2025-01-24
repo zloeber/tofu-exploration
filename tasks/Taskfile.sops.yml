@@ -1,0 +1,80 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+vars:
+  AGE_CONFIG_PATH: '{{ .AGE_CONFIG_PATH | default "~/.config/sops/age" }}'
+  SOPS_CONFIG_FILE: "{{.ROOT_DIR}}/.sops.yaml"
+  SECRETS_DIR: "{{.ROOT_DIR}}/secrets"
+  SOPS_AGE_KEY_FILE: "{{.AGE_CONFIG_PATH}}/keys.txt"
+
+tasks:
+  show:
+    desc: Show variables for this task
+    cmds:
+      - |
+        echo "AGE_CONFIG_PATH: {{.AGE_CONFIG_PATH}}"
+        echo "SECRETS_DIR: {{.SECRETS_DIR}}"
+        echo "SOPS_AGE_KEY_FILE: {{.SOPS_AGE_KEY_FILE}}"
+
+  init:
+    cmds:
+      - |
+        export PUBLIC_KEY=$(grep '# public key:' {{.SOPS_AGE_KEY_FILE}} | sed 's/# public key://g' | awk '{print $NF}')
+        echo "PUBLIC_KEY: ${PUBLIC_KEY}"
+        envsubst < {{.ROOT_DIR}}/templates/sops.yaml.tmpl > {{.ROOT_DIR}}/.sops.yaml
+    preconditions:
+      - sh: "[ ! -f {{.ROOT_DIR}}/.sops.yaml ]"
+        msg: ".sops.yaml already exists!"
+
+  encrypt:file:
+    desc: encrypt file
+    summary: |
+      Example usage: "task sops:encrypt:file -- file.yml"
+    cmds:
+      - sops --encrypt -i {{.CLI_ARGS}}
+
+  decrypt:file:
+    desc: decrypt sops file.
+    summary: |
+      Example usage: "task sops:decrypt:file -- file.yml"
+    cmds:
+      - sops --decrypt -i {{.CLI_ARGS}}
+
+  age:keygen:
+    desc: Initialize Age Key for Sops
+    cmds:
+      - |
+        mkdir -p {{.AGE_CONFIG_PATH}}
+        age-keygen --output {{.SOPS_AGE_KEY_FILE}}
+        chmod 400 {{.SOPS_AGE_KEY_FILE}}
+    status:
+      - test -f "{{.SOPS_AGE_KEY_FILE}}"
+
+  encrypt:all:
+    desc: Encrypt all secrets in the secrets folder
+    cmds:
+      - |
+        for file in $(find {{.SECRETS_DIR}} -type f;); do
+          echo "Encrypting $file"
+          sops --encrypt -i "$file"
+        done
+    preconditions:
+      - sh: "test -d {{.SECRETS_DIR}}"
+        msg: "Missing secrets path: {{.SECRETS_DIR}}"
+      - sh: "test -f {{.SOPS_AGE_KEY_FILE}}"
+        msg: "Missing Sops Age key file"
+
+  decrypt:all:
+    desc: Dencrypt all secrets in the secrets folder
+    cmds:
+      - |
+        for file in $(find {{.SECRETS_DIR}} -type f;); do
+          echo "Decrypting $file"
+          sops --decrypt -i "$file"
+        done
+    preconditions:
+      - sh: "test -d {{.SECRETS_DIR}}"
+        msg: "Missing secrets path: {{.SECRETS_DIR}}"
+      - sh: "test -f {{.SOPS_AGE_KEY_FILE}}"
+        msg: "Missing Sops Age key file"

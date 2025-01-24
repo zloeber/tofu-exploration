@@ -228,6 +228,8 @@ tasks:
       - task: destroy
         vars:
           TARGET: local
+      - |
+        rm -rf ./secrets/local
 
   clean:
     cmds:

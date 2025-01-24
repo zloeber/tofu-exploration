@@ -159,4 +159,5 @@ terraform.rc
 .tfplan.*
 *.tfplan
 *.lock.hcl
-secrets
+#secrets
+*.backup
