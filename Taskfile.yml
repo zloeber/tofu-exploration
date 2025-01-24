@@ -239,6 +239,5 @@ tasks:
         rm -rf ./infrastructure/environments/{{.TARGET}}/.terraform
         rm -rf ./infrastructure/environments/{{.TARGET}}/cluster1/.terraform
         rm -rf ./infrastructure/environments/{{.TARGET}}/cluster2/.terraform
-        rm -rf ./secrets/{{.TARGET}} "*.tfplan*"
-        find ./infrastructure/environments/{{.TARGET}} -type f \( -name "*.tfstate" -o -name "*.tfplan" -o -name "*.terraform" -o -name "*.lock.hcl" \) -exec rm -f {} +
-        find ./secrets/{{.TARGET}} -type f \( -name "*.tfstate" -o -name "*.tfplan" -o -name ".terraform" -o -name "tfplan.json" \) -exec rm -f {} +
+        find ./infrastructure/environments/{{.TARGET}} -type f \( -name "*.tfstate" -o -name "*.tfplan" -o -name "*.terraform" -o -name "*.lock.hcl" \) -exec rm -f {} + || true
+        find ./secrets/{{.TARGET}} -type f \( -name "*.tfstate" -o -name "*.tfplan" -o -name ".terraform" -o -name "tfplan.json" \) -exec rm -f {} + || true
