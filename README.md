@@ -44,6 +44,8 @@ There are two branches so you can better diff the changes between the terraform 
 
 # Terraform
 
+**BRANCH**: main
+
 The `main` branch includes terraform manifests for deploying 2 kind clusters side by side. The state is stored for each component as separate terraform state files in the `./secrets` folder. This folder is then targeted with `sops` to encrypt contents within.
 
 To run through the multiple terraform states I could have used workspaces. But it was simpler to just target another file locally and use taskfile tricks to do multiple stacks in a row.
@@ -115,6 +117,8 @@ task destroy:all
 ```
 
 # Opentofu
+
+**BRANCH**: tofu-encryption
 
 This is the same deployment using opentofu's encrypted state and provider iteration. Big update is that we are changing the binary used in our main `Taskfile.yml` definition.
 
