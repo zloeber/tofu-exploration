@@ -157,6 +157,8 @@ Specifically the argo git ssh keys and the kubernetes configuration files are no
 
 > **Interesting:** Because the kind provider I used doesn't track the local config file resource when you create the cluster using that attribute I needed to make minor changes to isolate the kubeconfig files to their own generated file resources instead.
 
+If everything is working as expected for your terraform deployment locally you should be able to push it up to your repo as-is and then pull it down later from any machine with the same age key and it should allow you to process tofu commands against it while still keeping all of its written contents entirely encrypted.
+
 # Tips
 
 - This builds two kube clusters then drops private keys and kube config locally in ~~a .gitignore defined~~ the `./secrets` path. You can use this to your advantage and target that folder with sops to encrypt things per cluster with just a wee bit more work ;)
