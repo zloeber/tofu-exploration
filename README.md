@@ -120,9 +120,9 @@ task destroy:all
 
 **BRANCH**: tofu-encryption
 
-This is the same deployment using opentofu's encrypted state and provider iteration. Big update is that we are changing the binary used in our main `Taskfile.yml` definition.
+This is the same deployment is done using opentofu's encrypted state instead of sops. First big update is that we are changing the binary used in our main `Taskfile.yml` definition to tofu.
 
-I did try to use the VSCode plugin for OpenTofu but it was not very helpful for the more recent features (like the encryption block).
+**NOTE** I did try to use the VSCode plugin for OpenTofu but it was not very helpful for the more recent features (like the encryption block).
 
 ## State/Plan Encryption
 
