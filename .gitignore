@@ -164,3 +164,4 @@ terraform.rc
 secrets/*/*_config
 secrets/*/*_id_rsa
 secrets/*/*_id_rsa.pub
+infrastructure/environments/*/*_config
