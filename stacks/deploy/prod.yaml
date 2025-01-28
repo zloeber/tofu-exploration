@@ -8,19 +8,9 @@ import:
 
 components:
   terraform:
-    localhost:
-      backend:
-        local:
-          path: "../../../secrets/prod/baremetal_state.json"
+    baremetal:
+      backend_type: local
       vars:
         env: "prod"
-        clusters: ["cluster1", "cluster2"]
+        clusters: ["cluster1"]
         secrets_path: "../../../secrets/prod"
-    cluster1:
-      backend:
-        local:
-          path: "../../../secrets/prod/cluster1_state.json"
-      vars:
-        cluster_name: "cluster1"
-        key_path: "../../../secrets/prod/"
-        kubeconfig: "../../../secrets/prod/cluster1_config"

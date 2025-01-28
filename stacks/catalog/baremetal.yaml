@@ -3,10 +3,10 @@ components:
     baremetal:
       metadata:
         component: "baremetal"
-    homelab:
-      metadata:
-        component: homelab
-      settings:
-        depends_on:
-          1:
-            component: "baremetal"
+    # homelab:
+    #   metadata:
+    #     component: homelab
+    #   settings:
+    #     depends_on:
+    #       1:
+    #         component: "baremetal"

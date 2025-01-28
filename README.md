@@ -82,10 +82,15 @@ Atmos has its own workflow engine that is used to run through various components
 ```mermaid
 flowchart TD
     Stacks --> stack1[stack - dev]
+    Stacks --> stack2[stack - prod]
     stack1 --> Catalog[Catalog - locahost]
+    stack2 --> CatalogBM[Catalog - baremetal]
+    CatalogBM --> compBM1[Component - baremetal]
     Catalog --> comp1[Component - locahost]
     Catalog --> comp2[Component - cluster1]
     Catalog --> comp3[Component - cluster2]
 ```
 
-> **NOTE** If you are using mise it will automatically load the appropriate `TF_VAR_state_passphrase` value should already be in your shell session. You can run atmos commands without using task then.
+> **NOTE** If you are using mise it will automatically load the appropriate `TF_VAR_state_passphrase` value should already be in your shell session. You can run atmos commands without using `task` then.
+
+# Tips

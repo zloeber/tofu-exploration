@@ -25,7 +25,6 @@ resource "ansible_playbook" "prepare" {
   extra_vars = each.value.variables
 }
 
-
 resource "ansible_playbook" "installation" {
   playbook   = "cluster-installation.yml"
   name       = "dynamic_hosts"
