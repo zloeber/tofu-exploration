@@ -1,0 +1,25 @@
+base_path: ""
+
+components:
+  terraform:
+    base_path: "components/terraform"
+    command: "tofu"
+    apply_auto_approve: true
+    deploy_run_init: true
+    init_run_reconfigure: true
+    auto_generate_backend_file: false
+
+stacks:
+  base_path: "stacks"
+  included_paths:
+    - "deploy/*.yaml"
+  excluded_paths:
+    - "**/_defaults.yaml"
+  name_pattern: "{stage}"
+
+workflows:
+  base_path: stacks/workflows
+
+logs:
+  file: "/dev/stderr"
+  level: Info

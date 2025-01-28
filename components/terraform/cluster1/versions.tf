@@ -1,6 +1,7 @@
+
 terraform {
   required_version = ">= 1.9.0"
-  encryption {
+    encryption {
     ## Step 1: Add the desired key provider:
     key_provider "pbkdf2" "mykey" {
       passphrase = var.state_passphrase
@@ -12,7 +13,7 @@ terraform {
 
     method "unencrypted" "insecure" {}
     state {
-      # enforced = true
+      #enforced = true
       method = method.aes_gcm.passphrase
       fallback {
         method = method.unencrypted.insecure
@@ -27,20 +28,24 @@ terraform {
     }
   }
   required_providers {
-    kind = {
-      source  = "tehcyx/kind"
-      version = "0.7.0"
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.35.1"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.17.0"
     }
   }
-  backend "local" {
-    path = "../../../secrets/local/infrastructure_tfstate.json"
-  }
+  backend "local" {}
 }
 
-## Kind cluster creation
-module "clusters" {
-  for_each = toset(var.clusters)
-  source              = "../../modules/k8s-kind-cluster"
-  cluster_name        = each.key
-  cluster_config_path = "../../../secrets/${var.env}/${each.key}_config"
+provider "kubernetes" {
+  config_path = pathexpand(var.kubeconfig)
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = pathexpand(var.kubeconfig)
+  }
 }

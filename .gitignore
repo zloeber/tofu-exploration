@@ -133,10 +133,6 @@ dist
 # Local .terraform directories
 **/.terraform/*
 
-# .tfstate files
-*.tfstate
-*.tfstate.*
-
 # Crash log files
 crash.log
 
@@ -158,10 +154,11 @@ terraform.rc
 .tfplan
 .tfplan.*
 *.tfplan
-*.lock.hcl
-#secrets
 *.backup
 secrets/*/*_config
 secrets/*/*_id_rsa
 secrets/*/*_id_rsa.pub
-infrastructure/environments/*/*_config
+*-config
+*_config
+*.tfvars.json
+components/terraform/baremetal/inventory

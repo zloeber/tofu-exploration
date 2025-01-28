@@ -1,0 +1,19 @@
+components:
+  terraform:
+    localhost:
+      metadata:
+        component: "localhost"
+    cluster1:
+      metadata:
+        component: cluster1
+      settings:
+        depends_on:
+          1:
+            component: "localhost"
+    cluster2:
+      metadata:
+        component: cluster2
+      settings:
+        depends_on:
+          1:
+            component: "localhost"

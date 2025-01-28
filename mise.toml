@@ -1,9 +1,11 @@
+[[env]]
+_.source = '.envrc'
+
 [tools]
 task = 'latest'
 jq = 'latest'
 opentofu = "latest"
-#terraform = "latest"
 kind = "latest"
 sops = "latest"
 age = "latest"
-sopstool = "latest"
+atmos = "latest"

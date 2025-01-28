@@ -1,0 +1,18 @@
+name: localhost
+description: Bring up and configure a few kind clusters
+workflows:
+  up:
+    description: |
+      Bring up the local environment
+    steps:
+      - command: terraform apply localhost -auto-approve
+      - command: terraform apply cluster1 -auto-approve
+      - command: terraform apply cluster2 -auto-approve
+
+  down:
+    description: |
+      Tear it all down
+    steps:
+      - command: terraform destroy cluster2 -auto-approve
+      - command: terraform destroy cluster1 -auto-approve
+      - command: terraform destroy localhost -auto-approve

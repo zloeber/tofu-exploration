@@ -13,8 +13,8 @@ else
 fi
 
 # Run these if you use experimental features like automatic import of .env files
-# mise settings set experimental true
-# mise trust
+mise settings set experimental true
+mise trust
 
 # Check if GITHUB_TOKEN is set
 if [ -z "$GITHUB_TOKEN" ]; then

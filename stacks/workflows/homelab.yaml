@@ -1,0 +1,16 @@
+name: baremetal
+description: Bring up and configure a few kind clusters
+workflows:
+  up:
+    description: |
+      Bring up the local environment
+    steps:
+      - command: terraform apply baremetal -auto-approve
+      - command: terraform apply homelab -auto-approve
+
+  down:
+    description: |
+      Tear it all down
+    steps:
+      - command: terraform destroy homelab -auto-approve
+      - command: terraform destroy baremetal -auto-approve
