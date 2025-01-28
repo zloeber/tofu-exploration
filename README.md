@@ -89,6 +89,7 @@ flowchart TD
     Catalog --> comp1[Component - locahost]
     Catalog --> comp2[Component - cluster1]
     Catalog --> comp3[Component - cluster2]
+    CatalogBM -.->|may also use|comp2
 ```
 
 > **NOTE** If you are using mise it will automatically load the appropriate `TF_VAR_state_passphrase` value should already be in your shell session. You can run atmos commands without using `task` then.
