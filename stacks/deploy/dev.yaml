@@ -5,31 +5,20 @@ vars:
 
 import:
   - catalog/localhost
-# terraform:
-#   backend_type: local
 
 components:
   terraform:
     localhost:
-      backend:
-        local:
-          path: "../../../secrets/dev/localhost_state.json"
       vars:
         env: "dev"
         clusters: ["cluster1", "cluster2"]
         secrets_path: "../../../secrets/dev"
     cluster1:
-      backend:
-        local:
-          path: "../../../secrets/dev/cluster1_state.json"
       vars:
         cluster_name: "cluster1"
         key_path: "../../../secrets/dev/"
         kubeconfig: "../../../secrets/dev/cluster1_config"
     cluster2:
-      backend:
-        local:
-          path: "../../../secrets/dev/cluseter2_state.json"
       vars:
         cluster_name: "cluster2"
         key_path: "../../../secrets/dev/"

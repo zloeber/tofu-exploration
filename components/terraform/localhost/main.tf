@@ -32,9 +32,6 @@ terraform {
       version = "0.7.0"
     }
   }
-  backend "local" {
-  #  path = "../../../secrets/local/infrastructure_tfstate.json"
-  }
 }
 
 ## Kind cluster creation

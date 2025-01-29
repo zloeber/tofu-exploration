@@ -32,7 +32,7 @@ resource "helm_release" "argocd" {
   repository       = "https://argoproj.github.io/argo-helm"
   upgrade_install  = true
   values = [
-    templatefile("${path.module}/config.yml", {
+    templatefile("${path.module}/values.yml", {
       argocd_server_url = "https://argocd-server.argocd.svc.cluster.local"
     })
   ]

@@ -27,3 +27,15 @@ variable "key_path" {
   description = "Path to the directory where the SSH keys will be stored."
   type        = string
 }
+
+# variable "chart_values" {
+#   description = "Values to be passed to the Helm chart"
+#   type        = map(any)
+#   default     = {}
+# }
+
+variable "stage" {
+  description = "The stage to deploy to."
+  type        = string
+  default     = "dev"
+}

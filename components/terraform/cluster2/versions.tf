@@ -37,7 +37,6 @@ terraform {
       version = "2.17.0"
     }
   }
-  backend "local" {}
 }
 
 provider "kubernetes" {
